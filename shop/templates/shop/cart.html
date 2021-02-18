@@ -1,0 +1,89 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block content %}
+{% load cartfilter %}
+<div class="container">
+
+<div class="border-rounded ">
+
+
+<hr>
+<table class="table" style="background-color: white;">
+    <thead>
+        <h1 class='logo' style="font-size: 29px;">My Cart</h1>
+        <tr>
+            <th>s.no</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Quant.</th>
+            <th>Total price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in pros %}
+        <tr>
+            <td scope="row">{{forloop.counter}}</td>
+            <td><img class="rounded-circle" style="height:80px" src="{{i.image.url}}" alt=""></td>
+            <td>Rs{{i.price}}</td>
+            <th>{{i|quant:request.session.cart}}</th>
+            <td>Rs{{i|multiply:request.session.cart}}</td>
+         
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+    <tfoot>
+        <tr >
+            <th class=""colspan=3></th>
+            <th>total</th>
+         
+                <th>{{pros|total:request.session.cart}}</th>
+            
+        </tr>
+    </tfoot>
+</table>
+<div class="m-3 p-3">
+    <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-outline-info col-lg-3 float-right" href="#">Checkout</a>
+</div>
+</div>
+
+</div>
+
+
+<!-- Button trigger modal ->
+    Launch static backdrop modal
+  </but>
+  
+  <!- Modal --->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="m-2 p-3">
+                <form action="checkout" method="POST">
+                    {% csrf_token %}
+                    <div class="form-gorup">
+                        
+                    <label for="" >Address</label>
+                    <input type="text" class="form-control" name="address">
+                </div>
+                <div class="form-group">
+                     <label for="">Phone</label>
+                    <input type="text" name="phone" class="form-control">
+                </div>
+                <br>
+                <input type="submit" value="checkout" class="btn btn-secondary">
+                 </form>
+
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+{% endblock %}
